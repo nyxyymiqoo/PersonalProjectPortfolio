@@ -1,4 +1,6 @@
-# Stockroom inventory
+# PersonalProjectPortfolio
+
+## Stockroom inventory
 
 Stockroom is a small inventory app for tracking product details and recording stock changes. It is a learning project: React handles the interface, while a local API validates changes and stores products and movement history in SQLite.
 
