@@ -10,7 +10,7 @@ export function startServer() {
 	const database = createDatabase(process.env.DB_PATH || defaultDatabasePath);
 	const app = createApiApp(database);
 	const server = createServer(app);
-	const port = 3001;
+	const port = 5173;
 
 	server.on("error", (error) => {
 		console.error("Could not start the inventory server:", error.message);
