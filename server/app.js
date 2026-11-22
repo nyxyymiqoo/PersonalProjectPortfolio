@@ -210,6 +210,27 @@ export function createApiApp(database) {
 		return response.json({ status: "ok" });
 	});
 
+	app.get("/api/movements", (request, response) => {
+		const type = request.query.type;
+
+		if (
+			type !== undefined &&
+			type !== "receive" &&
+			type !== "remove"
+		) {
+			return sendError(
+				response,
+				400,
+				"INVALID_MOVEMENT_TYPE",
+				"Movement type must be 'receive' or 'remove'."
+			);
+		}
+
+		return response.json({
+			movements: getAllMovements(database, type)
+		});
+	});
+
 	app.get("/api/products", (_request, response) => {
 		const products = database.prepare("SELECT * FROM products ORDER BY id ASC").all().map(toProduct);
 		response.json({ products, total: products.length });
