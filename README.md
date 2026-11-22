@@ -45,7 +45,7 @@ npm run build
 npm start
 ```
 
-`npm start` serves the built UI and API together. Set `PORT` to change the server port, `HOST` to change its bind address, or `DB_PATH` to choose another SQLite file. The database is intentionally ignored by Git; back it up separately if its contents matter.
+`npm start` serves the built UI and API together on port 3001. Set `HOST` to change its bind address or `DB_PATH` to choose another SQLite file. The database is intentionally ignored by Git; back it up separately if its contents matter.
 
 ## API
 

@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { getProduct, toProduct } from "./database.js";
@@ -185,19 +186,25 @@ function recordMovement(database, productId, movement, requestKey) {
 }
 
 export function createApiApp(database) {
-	const app = express();
-	app.disable("x-powered-by");
-	app.use(express.json({ limit: "16kb" }));
+    const app = express();
 
-	app.get("/api/health", (_request, response) => response.json({ status: "ok" }));
+    app.disable("x-powered-by");
 
-	app.get("/api/movements", (request, response) => {
-		const type = request.query.type;
-		if (type !== undefined && type !== "receive" && type !== "remove") {
-			return sendError(response, 400, "INVALID_MOVEMENT_TYPE", "Movement type must be 'receive' or 'remove'.");
-		}
-		return response.json({ movements: getAllMovements(database, type) });
-	});
+    // Allow requests from the published Hostinger website.
+    const allowedOrigin = process.env.FRONTEND_ORIGIN;
+
+    if (allowedOrigin) {
+        app.use("/api", cors({
+            origin: allowedOrigin,
+            methods: ["GET", "POST"],
+            allowedHeaders: [
+                "Content-Type",
+                "Idempotency-Key"
+            ]
+        }));
+    }
+
+    app.use(express.json({ limit: "16kb" }));
 
 	app.get("/api/products", (_request, response) => {
 		const products = database.prepare("SELECT * FROM products ORDER BY id ASC").all().map(toProduct);
