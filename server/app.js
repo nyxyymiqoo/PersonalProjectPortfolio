@@ -208,7 +208,7 @@ export function createApiApp(database) {
 
 	app.get("/api/health", (_request, response) => {
 		return response.json({ status: "ok" });
-	}
+	});
 
 	app.get("/api/products", (_request, response) => {
 		const products = database.prepare("SELECT * FROM products ORDER BY id ASC").all().map(toProduct);
