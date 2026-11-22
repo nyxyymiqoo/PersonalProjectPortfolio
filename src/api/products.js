@@ -16,7 +16,7 @@ async function request(path, options = {}) {
   let response;
 
   try {
-    response = await fetch(${API_BASE_URL}${path}, {
+    response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
@@ -37,14 +37,14 @@ async function request(path, options = {}) {
     data = await response.json();
   } catch {
     throw new Error(
-      The inventory server returned an invalid response (${response.status}).
+      `The inventory server returned an invalid response (${response.status}).`
     );
   }
 
   if (!response.ok) {
     throw new ApiError(
       data.error?.message ||
-        The inventory server returned ${response.status}.,
+        `The inventory server returned ${response.status}.`,
       response.status,
       data.error?.code,
       data.error?.details
@@ -78,7 +78,7 @@ export async function createStockMovement(
   movement,
   idempotencyKey
 ) {
-  return request(/api/products/${id}/movements, {
+  return request(`/api/products/${id}/movements`, {
     method: "POST",
     headers: {
       "Idempotency-Key": idempotencyKey
