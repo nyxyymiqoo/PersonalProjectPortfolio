@@ -282,6 +282,29 @@ export function createApiApp(database) {
 		return response.status(result.replayed ? 200 : 201).json(result);
 	});
 
+	app.use((req, res, next) => {
+		res.setHeader(
+			"Access-Control-Allow-Origin",
+			"https://rural-yellowgreen-gnat-89.hostingersite.com"
+		);
+
+		res.setHeader(
+			"Access-Control-Allow-Methods",
+			"GET, POST, OPTIONS"
+		);
+
+		res.setHeader(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Idempotency-Key"
+		);
+
+		if (req.method === "OPTIONS") {
+			return res.sendStatus(204);
+		}
+
+		next();
+	});
+
 	app.use("/api", (_request, response) => sendError(response, 404, "API_ROUTE_NOT_FOUND", "API endpoint was not found."));
 
 	if (existsSync(DIST_DIRECTORY)) {
